@@ -9,5 +9,9 @@ class Pizza:
   # Equivalent de toString  
   def __repr__(self):
     return str(self.index) + " " + str(self.slices)
+  
+  
+  def __lt__(self, other):
+    return self.slices < other.slices	
     
     
