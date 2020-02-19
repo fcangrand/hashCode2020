@@ -1,6 +1,6 @@
 from pizza import Pizza
 
-fname = "d_quite_big.in"
+fname = "a_example.in"
 x = 0
 
 # Partie Lecture fichier
@@ -23,9 +23,11 @@ with open("input/" + fname) as f :
 #print('allPizza', allPizza)
 
 # Tri tableau par pizaa avec le plus de parts
+pizza_sorted = sorted(allPizza , reverse=True)
+print(pizza_sorted)
 allPizza.sort(key=lambda x: x.slices, reverse=True)
 
-#print('allPizza', allPizza)
+print('allPizza', allPizza)
 currentSlices = 0
 i = 0
 pizzaTaken = []
