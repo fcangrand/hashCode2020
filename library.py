@@ -6,24 +6,25 @@ class Library:
         self.nbBooks = int(nbBooks)
         self.signupTime = int(signupTime)
         self.nbBooksPerDay = int(nbBooksPerDay)
-        self.books = []
+        self.books = {}
         self.readBooks = []
 
     def addBook(self, book):
-        self.books.append(book)
+        self.books[book.index] = book.score
 
     def getNextBooksToScan(self):
         if self.nbBooksPerDay > len(self.books):
             self.nbBooksPerDay = len(self.books)
-        booksToRead = self.books[:self.nbBooksPerDay]
-        self.books = self.books[self.nbBooksPerDay:]
+        booksToRead = list(self.books)[:self.nbBooksPerDay]
+        for i in booksToRead:
+            del self.books[i]
         self.readBooks = self.readBooks + booksToRead
         return booksToRead
 
     def getScore(self, nb_days):
         if self.signupTime >= int(nb_days):
             return 0
-        scoreTotal = sum(b.score for b in self.books)
+        scoreTotal = sum(self.books.values())
         return (1 / self.signupTime) * scoreTotal * self.nbBooksPerDay# 1 / self.nbBooks / self.nbBooksPerDay + 1 / self.signupTime * 1 + 1 - 1 / scoreTotal
 
     def __repr__(self):
@@ -36,10 +37,6 @@ class Library:
         return librairieString
 
     def removeBooks(self, readByOtherLibrary):
-	    for bookToRemove in readByOtherLibrary:
-		    for bookInbooks in self.books:
-			    if bookInbooks.index == bookToRemove.index:
-				    self.books.remove(bookInbooks)
-				    break
-			    elif bookToRemove.score > bookInbooks.score:
-				    break
+        for bookToRemove in readByOtherLibrary:
+            if bookToRemove in self.books:
+                del self.books[bookToRemove]
