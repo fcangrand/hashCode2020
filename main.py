@@ -1,6 +1,7 @@
 import sys
 from library import Library
 from book import Book
+import time
 
 fname = sys.argv[1]
 x = 0
@@ -10,6 +11,8 @@ nb_days = 0
 
 book_scores = []
 libraries = []
+
+seconds = time.time()
 
 # Partie Lecture fichier
 with open("input/" + fname) as f:
@@ -78,13 +81,17 @@ for x in range(int(nb_days)):
 
 
 
+scannedLibrairiesWithBooks = list(filter(lambda lib: len(lib.readBooks) > 0, scannedLibrairies))
 # Partie Ecriture Sortie
 fichier = open("output/" + fname, "w+")
-fichier.write(str(len(scannedLibrairies)) + "\n")
-for lib in scannedLibrairies:
+fichier.write(str(len(scannedLibrairiesWithBooks)) + "\n")
+for lib in scannedLibrairiesWithBooks:
     fichier.write(str(lib.id) + " " + str(len(lib.readBooks)) + "\n")
     for book in lib.readBooks:
         fichier.write(str(book.index) + " ")
     fichier.write("\n")
 
 fichier.close()
+
+secondsEnd = time.time()
+print("Local time:", secondsEnd - seconds)
