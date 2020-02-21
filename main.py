@@ -5,11 +5,10 @@ import time
 import collections
 
 fname = sys.argv[1]
-x = 0
 nb_libraries = 0
 nb_different_books = 0
 nb_days = 0
-
+x = 0
 book_scores = []
 libraries = []
 
@@ -21,6 +20,7 @@ with open("input/" + fname) as f:
         if x == 0:
             # Lecture nb_different_books, nb_different_books, nb_days
             nb_different_books, nb_libraries, nb_days = line.split()
+            nb_days = int(nb_days)
         elif x == 1:
             # Lecture score livres
             books = line.split()
@@ -41,26 +41,15 @@ with open("input/" + fname) as f:
         x += 1
 
 # Partie Algo...
-#print('nb_libraries', nb_libraries)
-#print('nb_different_books', nb_different_books)
-#print('nb_days', nb_days)
-
-#print('Libraries :')
-#for i in range(len(libraries)):
-#    print(libraries[i])
-
-
-
 scannedLibrairies = []
 daysUntilNextSignUp = 0
 
 librairiesSorted = libraries[:]
-# librairiesSorted.sort(key=lambda lib: lib.signupTime)
+# A voir si on recalcule un score à chaque nouvelle dispo plutot
 librairiesSorted.sort(key=lambda lib: lib.getScore(nb_days), reverse=True)
 
-librairiesWithBookSent = []
 
-for x in range(int(nb_days)):
+for x in range(nb_days):
     print(x)
     if daysUntilNextSignUp == 0:
         if len(librairiesSorted) > len(scannedLibrairies):
@@ -70,7 +59,7 @@ for x in range(int(nb_days)):
     for lib in scannedLibrairies:
         books = lib.getNextBooksToScan()
 		# A optimiser
-        if x < int(nb_days) and len(books) > 0:
+        if x < nb_days - 1 and len(books) > 0:
           for allLib in libraries:
             if allLib != lib:
               allLib.removeBooks(books)
@@ -78,11 +67,10 @@ for x in range(int(nb_days)):
     daysUntilNextSignUp -= 1
 
     if daysUntilNextSignUp <= 0 and len(librairiesSorted) != len(scannedLibrairies) and x +1 != nb_days:
-        # print(signingLibrary)
         scannedLibrairies.append(signingLibrary)
 
 
-
+# Suppression librairies sans livres lus
 scannedLibrairiesWithBooks = list(filter(lambda lib: len(lib.readBooks) > 0, scannedLibrairies))
 # Partie Ecriture Sortie
 fichier = open("output/" + fname, "w+")
