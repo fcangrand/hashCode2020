@@ -2,6 +2,7 @@ import sys
 from library import Library
 from book import Book
 import time
+import collections
 
 fname = sys.argv[1]
 x = 0
@@ -35,7 +36,8 @@ with open("input/" + fname) as f:
             for i in range(len(book_ids)):
                 book_id = int(book_ids[i])
                 libraries[-1].addBook(Book(book_id, book_scores[book_id]))
-            sorted(libraries[-1].books, key=libraries[-1].books.get, reverse=True)
+            sorted_x = sorted(libraries[-1].books.items(), key=lambda kv: kv[1], reverse=True)
+            libraries[-1].books = collections.OrderedDict(sorted_x)
         x += 1
 
 # Partie Algo...
