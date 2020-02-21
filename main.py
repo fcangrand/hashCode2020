@@ -35,7 +35,7 @@ with open("input/" + fname) as f:
             for i in range(len(book_ids)):
                 book_id = int(book_ids[i])
                 libraries[-1].addBook(Book(book_id, book_scores[book_id]))
-            libraries[-1].books.sort(key=lambda b: b.score, reverse=True)
+            sorted(libraries[-1].books, key=libraries[-1].books.get, reverse=True)
         x += 1
 
 # Partie Algo...
@@ -88,7 +88,7 @@ fichier.write(str(len(scannedLibrairiesWithBooks)) + "\n")
 for lib in scannedLibrairiesWithBooks:
     fichier.write(str(lib.id) + " " + str(len(lib.readBooks)) + "\n")
     for book in lib.readBooks:
-        fichier.write(str(book.index) + " ")
+        fichier.write(str(book) + " ")
     fichier.write("\n")
 
 fichier.close()
