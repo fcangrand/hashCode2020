@@ -24,7 +24,7 @@ class Library:
         if self.signupTime >= int(nb_days):
             return 0
         scoreTotal = sum(b.score for b in self.books)
-        return (1 / self.signupTime) * scoreTotal #* self.nbBooksPerDay# 1 / self.nbBooks / self.nbBooksPerDay + 1 / self.signupTime * 1 + 1 - 1 / scoreTotal
+        return (1 / self.signupTime) * scoreTotal * self.nbBooksPerDay# 1 / self.nbBooks / self.nbBooksPerDay + 1 / self.signupTime * 1 + 1 - 1 / scoreTotal
 
     def __repr__(self):
         librairieString = "id:" + str(self.id) + " nbBooks:" + str(self.nbBooks) + " signupTime:" + str(
@@ -36,7 +36,10 @@ class Library:
         return librairieString
 
     def removeBooks(self, readByOtherLibrary):
-        for bookInbooks in self.books:
-            for bookToRemove in readByOtherLibrary:
-                if bookInbooks.index == bookToRemove.index:
-                    self.books.remove(bookInbooks)
+	    for bookToRemove in readByOtherLibrary:
+		    for bookInbooks in self.books:
+			    if bookInbooks.index == bookToRemove.index:
+				    self.books.remove(bookInbooks)
+				    break
+			    elif bookToRemove.score > bookInbooks.score:
+				    break

@@ -65,9 +65,10 @@ for x in range(int(nb_days)):
     for lib in scannedLibrairies:
         books = lib.getNextBooksToScan()
 		# A optimiser
-        #if x < int(nb_days):
-        #  for allLib in libraries:
-        #     allLib.removeBooks(books)
+        if x < int(nb_days) and len(books) > 0:
+          for allLib in libraries:
+            if allLib != lib:
+              allLib.removeBooks(books)
 
     daysUntilNextSignUp -= 1
 
