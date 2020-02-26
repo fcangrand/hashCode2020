@@ -44,21 +44,21 @@ with open("input/" + fname) as f:
 scannedLibrairies = []
 daysUntilNextSignUp = 0
 
+nb_librairies = len(libraries)
 librairiesSorted = libraries[:]
-# A voir si on recalcule un score à chaque nouvelle dispo plutot
-librairiesSorted.sort(key=lambda lib: lib.getScore(nb_days), reverse=True)
-
 
 for x in range(nb_days):
     print(x)
     if daysUntilNextSignUp == 0:
-        if len(librairiesSorted) > len(scannedLibrairies):
-          signingLibrary = librairiesSorted[len(scannedLibrairies)]
+        if nb_librairies > len(scannedLibrairies):
+		  # On trie pour rien , on veut juste le plus petit score à ce jour là
+          librairiesSorted.sort(key=lambda lib: lib.getScore(nb_days - x))
+          signingLibrary = librairiesSorted[0]
           daysUntilNextSignUp += signingLibrary.signupTime
 
     for lib in scannedLibrairies:
         books = lib.getNextBooksToScan()
-		# A optimiser
+		# Suppression par dictionnaire
         if x < nb_days - 1 and len(books) > 0:
           for allLib in libraries:
             if allLib != lib:
@@ -66,8 +66,9 @@ for x in range(nb_days):
 
     daysUntilNextSignUp -= 1
 
-    if daysUntilNextSignUp <= 0 and len(librairiesSorted) != len(scannedLibrairies) and x +1 != nb_days:
+    if daysUntilNextSignUp <= 0 and x +1 != nb_days:
         scannedLibrairies.append(signingLibrary)
+        librairiesSorted.pop(0)
 
 
 # Suppression librairies sans livres lus

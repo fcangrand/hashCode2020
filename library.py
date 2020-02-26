@@ -26,7 +26,8 @@ class Library:
             return 0
         scoreTotal = sum(self.books.values())
 		# Le C fait mieux sans le * self.nbBooksPerDay, le E fait mieux avec.. 
-        return (1 / self.signupTime) * scoreTotal #* self.nbBooksPerDay# 1 / self.nbBooks / self.nbBooksPerDay + 1 / self.signupTime * 1 + 1 - 1 / scoreTotal
+        score = (1 / self.signupTime) * scoreTotal * self.nbBooksPerDay 
+        return  0 - score
 
     def __repr__(self):
         librairieString = "id:" + str(self.id) + " nbBooks:" + str(self.nbBooks) + " signupTime:" + str(
