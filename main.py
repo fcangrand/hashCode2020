@@ -49,25 +49,24 @@ librairiesSorted = libraries[:]
 
 for x in range(nb_days):
     print(x)
-    if daysUntilNextSignUp == 0:
-        if nb_librairies > len(scannedLibrairies):
-		  # On trie pour rien , on veut juste le plus petit score à ce jour là
-          librairiesSorted.sort(key=lambda lib: lib.getScore(nb_days - x))
-          signingLibrary = librairiesSorted[0]
-          daysUntilNextSignUp += signingLibrary.signupTime
+    if daysUntilNextSignUp == 0 and nb_librairies > len(scannedLibrairies):
+        librairiesSorted.sort(key=lambda lib: lib.getScore(nb_days - x), reverse=True)
+        signingLibrary = librairiesSorted[0]
+        daysUntilNextSignUp += signingLibrary.signupTime
 
     for lib in scannedLibrairies:
-        books = lib.getNextBooksToScan()
-		# Suppression par dictionnaire
-        if x < nb_days - 1 and len(books) > 0:
-          for allLib in libraries:
-            if allLib != lib:
-              allLib.removeBooks(books)
+        lib.getNextBooksToScan()
 
     daysUntilNextSignUp -= 1
 
-    if daysUntilNextSignUp <= 0 and x +1 != nb_days:
+    if daysUntilNextSignUp <= 0 and x +1 != nb_days and len(librairiesSorted) > 0:
         scannedLibrairies.append(signingLibrary)
+        books = signingLibrary.getAllFurtherReadBooks(nb_days - x)
+        # Suppression par dictionnaire de tous les livres qui seront traités par la lib
+        if x < nb_days - 1 and len(books) > 0:
+          for allLib in libraries:
+            if allLib != signingLibrary:
+              allLib.removeBooks(books)
         librairiesSorted.pop(0)
 
 
